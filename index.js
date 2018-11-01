@@ -69,13 +69,13 @@ bot.on('ready', async () => {
 bot.on('guildMemberAdd', async (member) => {
     member.addRole(rrAccept.camperOrientationID);
 
-    await cmd.run('magick "convert" "./Welcome/welcome-template.jpg" "-gravity" "Center" "-fill" "#FFFF95" "-weight" "500" "-pointsize" "200" "-font" "./font/Windlass.ttf" "-annotate" "+700-100" "' + member.user.username + '" "./Welcome/welcome-post.jpg"');
+    await cmd.run('magick "convert" "welcome-template.jpg" "-gravity" "Center" "-fill" "#FFFF95" "-weight" "500" "-pointsize" "200" "-font" "./font/Windlass.ttf" "-annotate" "+700-100" "' + member.user.username + '" "welcome-post.jpg"');
     welcomeChannel.send({files: [{
-        attachment: './Welcome/welcome-post.jpg',
+        attachment: 'welcome-post.jpg',
         name: 'welcome.jpg'
     }]})
     .then(message => {
-        fs.unlink('./Welcome/welcome-post.jpg', (err) => {
+        fs.unlink('welcome-post.jpg', (err) => {
             if(err) throw err;
         });
     })
