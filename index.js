@@ -10,13 +10,13 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send('No app here! I wonder how you even got here...');
+    res.sendFile(__dirname + '/page.html');
 });
 
 var http = require('http');
 
 setInterval(() => {
-    http.get('https://riordanwikidiscord.herokuapp.com/');
+    http.get('http://riordanwikidiscord.herokuapp.com/');
 })
 
 //FS-ImageMagick
@@ -24,10 +24,6 @@ setInterval(() => {
 const fs = require('fs');
 
 const gm = require('gm').subClass({imageMagick: true});
-
-//Node-Command-Line
-
-const cmd = require('node-command-line');
 
 //Discord
 
