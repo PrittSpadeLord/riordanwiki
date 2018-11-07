@@ -1,4 +1,4 @@
-//Express
+//Express-HTTP
 
 const express = require('express');
 const app = express();
@@ -9,9 +9,21 @@ app.listen(port, () => {
     console.log('Listening on Port ' + port);
 });
 
-//FS
+app.get('/', (req, res) => {
+    res.send('No app here! I wonder how you even got here...');
+});
+
+var http = require('http');
+
+setInterval(() => {
+    http.get('https://riordanwikidiscord.herokuapp.com/');
+})
+
+//FS-ImageMagick
 
 const fs = require('fs');
+
+const gm = require('gm').subClass({imageMagick: true});
 
 //Node-Command-Line
 
@@ -66,20 +78,30 @@ bot.on('ready', async () => {
     var roleMessage = await reactionChannel.fetchMessage('506034904967151626');
 });
 
-bot.on('guildMemberAdd', async (member) => {
+bot.on('guildMemberAdd', (member) => {
     member.addRole(rrAccept.camperOrientationID);
 
-    await cmd.run('magick "convert" "welcome-template.jpg" "-gravity" "Center" "-fill" "#FFFF95" "-weight" "500" "-pointsize" "200" "-font" "./font/Windlass.ttf" "-annotate" "+700-100" "' + member.user.username + '" "welcome-post.jpg"');
-    welcomeChannel.send({files: [{
-        attachment: 'welcome-post.jpg',
-        name: 'welcome.jpg'
-    }]})
-    .then(message => {
-        fs.unlink('welcome-post.jpg', (err) => {
-            if(err) throw err;
-        });
-    })
-    .catch(console.error);
+    gm('welcome-template.jpg')
+    .gravity('center')
+    .stroke('#FFFF95')
+    .fill('#FFFF95')
+    .pointSize(200)
+    .font('./font/Windlass.ttf')
+    .drawText(730, -80, member.user.username, 'center')
+    .write('welcome-post.jpg', (err) => {
+        if(err) throw err;
+
+        welcomeChannel.send({files: [{
+            attachment: 'welcome-post.jpg',
+            name: 'welcome.jpg'
+        }]})
+        .then(message => {
+            fs.unlink('welcome-post.jpg', (err) => {
+                if(err) throw err;
+            });
+        })
+        .catch(console.error);
+    });
 });
 
 bot.on('messageReactionAdd', (messageReaction, user) => {
@@ -180,8 +202,8 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
             user.send(`You left **${rrguild.roles.get(midgard.roleID).name}**`);           
         }
         else if(messageReaction.emoji.id == getEmojiID(ogygia.emoji)) {
-            rrguild.members.get(user.id).addRole(ogygia.roleID); 
-            user.send(`You joined **${rrguild.roles.get(ogygia.roleID).name}**`);           
+            rrguild.members.get(user.id).removeRole(ogygia.roleID); 
+            user.send(`You left **${rrguild.roles.get(ogygia.roleID).name}**`);           
         }
         else if(messageReaction.emoji.id == getEmojiID(labyrinth.emoji)) {
             rrguild.members.get(user.id).removeRole(labyrinth.roleID); 
