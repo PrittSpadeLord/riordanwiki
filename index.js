@@ -17,7 +17,7 @@ var http = require('http');
 
 setInterval(() => {
     http.get('http://riordanwikidiscord.herokuapp.com/');
-})
+}, 1000*60*5);
 
 //FS-ImageMagick
 
@@ -74,6 +74,8 @@ bot.on('ready', async () => {
     var roleMessage = await reactionChannel.fetchMessage('506034904967151626');
 });
 
+//Member-Joined
+
 bot.on('guildMemberAdd', (member) => {
     member.addRole(rrAccept.camperOrientationID);
 
@@ -100,7 +102,14 @@ bot.on('guildMemberAdd', (member) => {
     });
 });
 
+//Reaction-Add
+
 bot.on('messageReactionAdd', (messageReaction, user) => {
+    var reactionMessage = messageReaction.message;
+    if((reactionMessage.reactions.array().length >= 4) && (messageReaction.message.id != '506034904967151626'))  {
+        messageReaction.remove(user);
+    }
+
     if(messageReaction.message.id == '506034904967151626') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
             rrguild.members.get(user.id).addRole(yggdrasil.roleID);
@@ -171,6 +180,8 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
     }
 });
 
+//Reaction-Remove
+
 bot.on('messageReactionRemove', (messageReaction, user) => {
     if(messageReaction.message.id == '506034904967151626') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
@@ -230,8 +241,12 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
     }
 });
 
-bot.on('message', () => {
-    //
+//Messages
+
+bot.on('message', (message) => {
+    if(message.content.startsWith('*')) {
+        var command = message.content.slice(1, message.content.length);
+    }
 });
 
 bot.login(token.value);
