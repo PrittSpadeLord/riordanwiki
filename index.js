@@ -47,6 +47,7 @@ const firstNome = {emoji:'<:firstnome:506044618454859806>', roleID: '50581078159
 const duat = {emoji:'<:duat:506044618576756736>', roleID: '505811242431021067'}; 
 const campJupiter = {emoji:'<:campjupiter:506044617985359883>', roleID: '505810742927163392'}; 
 const campHalfBlood = {emoji:'<:camphalfblood:506044618446733331>', roleID: '505810699055005720'};
+const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '510317762485288988'}
 
 const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '505819119589785610'};
 const rrDeny = {emoji: '<:rr_deny:506063149674397707>'};
@@ -71,7 +72,6 @@ bot.on('ready', async () => {
 
     reactionChannel = rrguild.channels.get('505810499632365579');
     
-    var roleMessage = await reactionChannel.fetchMessage('506034904967151626');
 });
 
 //Member-Joined
@@ -159,6 +159,10 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
             rrguild.members.get(user.id).addRole(underworld.roleID); 
             user.send(`You joined **${rrguild.roles.get(underworld.roleID).name}**`);           
         }
+        else if(messageReaction.emoji.id == getEmojiID(scribe.emoji)) {
+            rrguild.members.get(user.id).addRole(scribe.roleID); 
+            user.send(`You joined **${rrguild.roles.get(scribe.roleID).name}**`);           
+        }
     }
 
     if(messageReaction.message.id == '506064055023173633') {
@@ -231,6 +235,10 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
         else if(messageReaction.emoji.id == getEmojiID(underworld.emoji)) {
             rrguild.members.get(user.id).removeRole(underworld.roleID); 
             user.send(`You left **${rrguild.roles.get(underworld.roleID).name}**`);           
+        }
+        else if(messageReaction.emoji.id == getEmojiID(scribe.emoji)) {
+            rrguild.members.get(user.id).removeRole(scribe.roleID); 
+            user.send(`You left **${rrguild.roles.get(scribe.roleID).name}**`);           
         }
     }
 
