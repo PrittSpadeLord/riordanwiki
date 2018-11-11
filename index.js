@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+app.use(express.static('public'));
 
 var port = process.env.PORT||8080
 
@@ -19,6 +20,22 @@ setInterval(() => {
     http.get('http://riordanwikidiscord.herokuapp.com/');
 }, 1000*60*5);
 
+//MongoDB
+
+const MongoClient = require('mongodb').MongoClient;
+var db;
+var trivia;
+
+MongoClient.connect('mongodb://ducks:penguins0@ds062818.mlab.com:62818/riordan-wiki', (err, client) => {
+    if(err) console.log(err);
+    console.log('Connected to Database!');
+    db = client.db('riordan-wiki');
+    db.collection('trivia').find().toArray((err, result) => {
+        if(err) console.log(err);
+        trivia = result[0];
+    });
+});
+
 //FS-ImageMagick
 
 const fs = require('fs');
@@ -34,6 +51,7 @@ const token = require('./Confidential/token.json')
 var rrguild;
 var reactionChannel;
 var welcomeChannel;
+var generalChannel;
 
 const yggdrasil = {emoji:'<:yggdrasil:506033543810383872>', roleID: '505809924995940362'};
 const valhalla = {emoji:'<:valhalla:506044619335663616>', roleID: '505810603563155487'};
@@ -57,7 +75,10 @@ function getEmojiID(emoji) {
 }
 
 bot.on('ready', async () => {
-    console.log('ready');
+    console.log('Bot is ready');
+
+    bot.user.setActivity('*help', 'PLAYING');
+
     rrguild = bot.guilds.get('505809707827724288');
     welcomeChannel = bot.channels.get('505809707827724292');
 
@@ -71,6 +92,8 @@ bot.on('ready', async () => {
     //console.log(rrguild.roles.array());
 
     reactionChannel = rrguild.channels.get('505810499632365579');
+
+    generalChannel = rrguild.channels.get('505809707827724292');
     
 });
 
@@ -84,7 +107,7 @@ bot.on('guildMemberAdd', (member) => {
     .stroke('#FFFF95')
     .fill('#FFFF95')
     .pointSize(200)
-    .font('./font/Windlass.ttf')
+    .font('./public/fonts/Windlass.ttf')
     .drawText(730, -80, member.user.username, 'center')
     .write('welcome-post.jpg', (err) => {
         if(err) throw err;
