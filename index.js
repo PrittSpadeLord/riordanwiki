@@ -280,4 +280,8 @@ bot.on('message', (message) => {
     }
 });
 
+//Error
+
+bot.on('error', console.error);
+
 bot.login(token.value);
