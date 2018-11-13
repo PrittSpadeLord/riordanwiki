@@ -52,6 +52,7 @@ var rrguild;
 var reactionChannel;
 var welcomeChannel;
 var generalChannel;
+var memberCountChannel;
 
 const yggdrasil = {emoji:'<:yggdrasil:506033543810383872>', roleID: '505809924995940362'};
 const valhalla = {emoji:'<:valhalla:506044619335663616>', roleID: '505810603563155487'};
@@ -94,12 +95,15 @@ bot.on('ready', async () => {
     reactionChannel = rrguild.channels.get('505810499632365579');
 
     generalChannel = rrguild.channels.get('505809707827724292');
-    
+
+    memberCountChannel = rrguild.channels.get('511963867698429962');
+    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
 });
 
 //Member-Joined
 
 bot.on('guildMemberAdd', (member) => {
+    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
     member.addRole(rrAccept.camperOrientationID);
 
     gm('welcome-template.jpg')
@@ -120,9 +124,16 @@ bot.on('guildMemberAdd', (member) => {
             fs.unlink('welcome-post.jpg', (err) => {
                 if(err) throw err;
             });
+            welcomeChannel.send('Head over to <#505810499632365579> to gain access to the server!');
         })
         .catch(console.error);
     });
+});
+
+bot.on('guildMemberRemove', (member) => {
+    welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
+
+    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
 });
 
 //Reaction-Add
