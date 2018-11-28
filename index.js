@@ -53,35 +53,41 @@ var reactionChannel;
 var welcomeChannel;
 var generalChannel;
 var memberCountChannel;
+var wikiEditsChannel;
+var discussionEditsChannel;
 
-const yggdrasil = {emoji:'<:yggdrasil:506033543810383872>', roleID: '505809924995940362'};
-const valhalla = {emoji:'<:valhalla:506044619335663616>', roleID: '505810603563155487'};
-const underworld = {emoji:'<:underworld:506044619214290954>', roleID: '505811311784099851'};
-const seaOfMonsters = {emoji:'<:seaofmonsters:506044619230937088>', roleID: '505810996367982592'}; 
-const ogygia = {emoji:'<:ogygia:506044619210096640>', roleID: '505810872149475340'}; 
-const midgard = {emoji:'<:midgard:506044619117559808>', roleID: '506055338013753344'}; 
-const labyrinth = {emoji:'<:labyrinth:506044619079811092>', roleID: '505811117977632779'}; 
-const huntersOfArtemis = {emoji:'<:huntersofartemis:506044618899456001>', roleID: '505810818181627925'}; 
-const firstNome = {emoji:'<:firstnome:506044618454859806>', roleID: '505810781598777344'}; 
-const duat = {emoji:'<:duat:506044618576756736>', roleID: '505811242431021067'}; 
-const campJupiter = {emoji:'<:campjupiter:506044617985359883>', roleID: '505810742927163392'}; 
-const campHalfBlood = {emoji:'<:camphalfblood:506044618446733331>', roleID: '505810699055005720'};
-const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '510317762485288988'}
+var triviaMessage;
 
-const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '505819119589785610'};
+const yggdrasil = {emoji:'<:yggdrasil:506033543810383872>', roleID: '418627055354380318'};
+const valhalla = {emoji:'<:valhalla:506044619335663616>', roleID: '282686862550630402'};
+const underworld = {emoji:'<:underworld:506044619214290954>', roleID: '289093372709437441'};
+const seaOfMonsters = {emoji:'<:seaofmonsters:506044619230937088>', roleID: '441822798512521219'}; 
+const ogygia = {emoji:'<:ogygia:506044619210096640>', roleID: '418624872449835009'}; 
+const midgard = {emoji:'<:midgard:506044619117559808>', roleID: '297033988428660738'}; 
+const labyrinth = {emoji:'<:labyrinth:506044619079811092>', roleID: '441825704800157697'}; 
+const huntersOfArtemis = {emoji:'<:huntersofartemis:506044618899456001>', roleID: '363126685228466185'}; 
+const firstNome = {emoji:'<:firstnome:506044618454859806>', roleID: '283804500731625477'}; 
+const duat = {emoji:'<:duat:506044618576756736>', roleID: '418625609388916747'}; 
+const campJupiter = {emoji:'<:campjupiter:506044617985359883>', roleID: '282686741503016960'}; 
+const campHalfBlood = {emoji:'<:camphalfblood:506044618446733331>', roleID: '282686672968351744'};
+const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '365275746278834177'}
+
+const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: ''};
 const rrDeny = {emoji: '<:rr_deny:506063149674397707>'};
 
 function getEmojiID(emoji) {
     return emoji.slice(emoji.length - 19, emoji.length - 1);
 }
 
+// Upon bot startup
+
 bot.on('ready', async () => {
     console.log('Bot is ready');
 
     bot.user.setActivity('*help', 'PLAYING');
 
-    rrguild = bot.guilds.get('505809707827724288');
-    welcomeChannel = bot.channels.get('505809707827724292');
+    rrguild = bot.guilds.get('282310567719469056');
+    welcomeChannel = bot.channels.get('505809707827724292'); //Aux
 
     var rrchannels = rrguild.channels.array();
     for(var i=0; i<rrchannels.length; i++) {
@@ -90,41 +96,45 @@ bot.on('ready', async () => {
             console.log(rrchannels[i].name);
         }
     }
-    //console.log(rrguild.roles.array());
 
-    reactionChannel = rrguild.channels.get('505810499632365579');
+    var roles = {
+        list: rrguild.roles.array()
+    };
 
-    generalChannel = rrguild.channels.get('505809707827724292');
+    reactionChannel = rrguild.channels.get('505760915988414467'); //#rules
+    
 
-    memberCountChannel = rrguild.channels.get('511963867698429962');
-    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
+    generalChannel = rrguild.channels.get('505809707827724292'); //Aux
+
+    //generalChannel.send('Guess the name of this character', );
+
+    
 });
 
 //Member-Joined
 
 bot.on('guildMemberAdd', (member) => {
-    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
     member.addRole(rrAccept.camperOrientationID);
 
-    gm('welcome-template.jpg')
+    gm('terminus-template.png')
     .gravity('center')
-    .stroke('#FFFF95')
-    .fill('#FFFF95')
-    .pointSize(200)
-    .font('./public/fonts/Windlass.ttf')
-    .drawText(730, -80, member.user.username, 'center')
-    .write('welcome-post.jpg', (err) => {
+    .stroke('#000000')
+    .fill('#000000')
+    .pointSize(160)
+    .font('Times New Roman')
+    .drawText(0, 0, member.user.username, 'center')
+    .write('terminus.png', (err) => {
         if(err) throw err;
 
         welcomeChannel.send({files: [{
-            attachment: 'welcome-post.jpg',
-            name: 'welcome.jpg'
+            attachment: 'terminus.png',
+            name: 'terminus.png'
         }]})
         .then(message => {
-            fs.unlink('welcome-post.jpg', (err) => {
+            fs.unlink('terminus.png', (err) => {
                 if(err) throw err;
             });
-            welcomeChannel.send('Head over to <#505810499632365579> to gain access to the server!');
+            welcomeChannel.send('Head over to <#516858902286172163> to gain access to the server!');
         })
         .catch(console.error);
     });
@@ -132,19 +142,18 @@ bot.on('guildMemberAdd', (member) => {
 
 bot.on('guildMemberRemove', (member) => {
     welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
-
-    memberCountChannel.setName('Member count: ' + rrguild.memberCount);
 });
 
 //Reaction-Add
 
 bot.on('messageReactionAdd', (messageReaction, user) => {
+    if(user.bot) return;
     var reactionMessage = messageReaction.message;
-    if((reactionMessage.reactions.array().length >= 4) && (messageReaction.message.id != '506034904967151626'))  {
+    if((reactionMessage.reactions.array().length >= 4) && (messageReaction.message.id != '516863525956616192'))  {
         messageReaction.remove(user);
     }
 
-    if(messageReaction.message.id == '506034904967151626') {
+    if(messageReaction.message.id == '516863525956616192') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
             rrguild.members.get(user.id).addRole(yggdrasil.roleID);
             user.send(`You joined **${rrguild.roles.get(yggdrasil.roleID).name}**`);            
@@ -199,7 +208,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
         }
     }
 
-    if(messageReaction.message.id == '506064055023173633') {
+    if(messageReaction.message.id == '516863523490365442') {
         if(messageReaction.emoji.id == getEmojiID(rrAccept.emoji)) {
             rrguild.members.get(user.id).removeRole(rrAccept.camperOrientationID);
             user.send(`Thanks for accepting the rules. You're now free to access the rest of the channels.`);
@@ -221,7 +230,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
 //Reaction-Remove
 
 bot.on('messageReactionRemove', (messageReaction, user) => {
-    if(messageReaction.message.id == '506034904967151626') {
+    if(messageReaction.message.id == '516863525956616192') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
             rrguild.members.get(user.id).removeRole(yggdrasil.roleID);
             user.send(`You left **${rrguild.roles.get(yggdrasil.roleID).name}**`);            
@@ -276,7 +285,7 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
         }
     }
 
-    if(messageReaction.message.id == '506064055023173633') {
+    if(messageReaction.message.id == '516863523490365442') {
         if(messageReaction.emoji.id == getEmojiID(rrAccept.emoji)) {
             rrguild.members.get(user.id).addRole(rrAccept.camperOrientationID);
         }
