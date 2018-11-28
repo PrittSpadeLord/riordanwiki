@@ -122,7 +122,7 @@ bot.on('guildMemberAdd', (member) => {
     .fill('#000000')
     .pointSize(160)
     .font('Times New Roman')
-    .drawText(0, 0, member.user.username, 'center')
+    .drawText(0, 0, member.user.username + '#' + member.user.discriminator, 'center')
     .write('terminus.png', (err) => {
         if(err) throw err;
 
