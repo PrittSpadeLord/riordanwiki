@@ -72,8 +72,10 @@ const campJupiter = {emoji:'<:campjupiter:506044617985359883>', roleID: '2826867
 const campHalfBlood = {emoji:'<:camphalfblood:506044618446733331>', roleID: '282686672968351744'};
 const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '365275746278834177'}
 
-const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: ''};
+const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '339883386598457358'};
 const rrDeny = {emoji: '<:rr_deny:506063149674397707>'};
+
+const embedColor = 0x6D85A8;
 
 function getEmojiID(emoji) {
     return emoji.slice(emoji.length - 19, emoji.length - 1);
@@ -103,6 +105,9 @@ bot.on('ready', async () => {
 
     reactionChannel = rrguild.channels.get('505760915988414467'); //#rules
     
+    reactionChannel.send({embed: {
+        color: 
+    }});
 
     generalChannel = rrguild.channels.get('505809707827724292'); //Aux
 
@@ -134,7 +139,9 @@ bot.on('guildMemberAdd', (member) => {
             fs.unlink('terminus.png', (err) => {
                 if(err) throw err;
             });
-            welcomeChannel.send('Head over to <#516858902286172163> to gain access to the server!');
+            generalChannel.send(`Hello <@${member.user.id}> and welcome to Riordan Wikia's discord server! If you're a new discord user who has probably just created a discord account, check out https://prittspadelord.github.io/RiordanWikiDiscord/ for some insightful help on how to navigate through Discord.
+            
+            Once you've done that, go to <#505760915988414467> and make sure you follow ***all of the instructions*** on that page if you wish to access the rest of the server.`);
         })
         .catch(console.error);
     });
