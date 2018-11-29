@@ -26,7 +26,7 @@ const MongoClient = require('mongodb').MongoClient;
 var db;
 var trivia;
 
-MongoClient.connect('mongodb://ducks:penguins0@ds062818.mlab.com:62818/riordan-wiki', (err, client) => {
+MongoClient.connect('mongodb://ducks:penguins0@ds062818.mlab.com:62818/riordan-wiki', {useNewUrlParser: true}, (err, client) => {
     if(err) console.log(err);
     console.log('Connected to Database!');
     db = client.db('riordan-wiki');
@@ -91,6 +91,8 @@ bot.on('ready', async () => {
     rrguild = bot.guilds.get('282310567719469056');
     welcomeChannel = bot.channels.get('505809707827724292'); //Aux
 
+    await rrguild.fetchMembers();
+
     var rrchannels = rrguild.channels.array();
     for(var i=0; i<rrchannels.length; i++) {
         if(rrchannels[i].type == 'text') {
@@ -99,15 +101,7 @@ bot.on('ready', async () => {
         }
     }
 
-    var roles = {
-        list: rrguild.roles.array()
-    };
-
     reactionChannel = rrguild.channels.get('505760915988414467'); //#rules
-    
-    reactionChannel.send({embed: {
-        color: 
-    }});
 
     generalChannel = rrguild.channels.get('505809707827724292'); //Aux
 
@@ -160,7 +154,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
         messageReaction.remove(user);
     }
 
-    if(messageReaction.message.id == '516863525956616192') {
+    if(messageReaction.message.id == '517751012858003488') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
             rrguild.members.get(user.id).addRole(yggdrasil.roleID);
             user.send(`You joined **${rrguild.roles.get(yggdrasil.roleID).name}**`);            
@@ -215,7 +209,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
         }
     }
 
-    if(messageReaction.message.id == '516863523490365442') {
+    if(messageReaction.message.id == '517752158767284253') {
         if(messageReaction.emoji.id == getEmojiID(rrAccept.emoji)) {
             rrguild.members.get(user.id).removeRole(rrAccept.camperOrientationID);
             user.send(`Thanks for accepting the rules. You're now free to access the rest of the channels.`);
@@ -237,7 +231,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
 //Reaction-Remove
 
 bot.on('messageReactionRemove', (messageReaction, user) => {
-    if(messageReaction.message.id == '516863525956616192') {
+    if(messageReaction.message.id == '517751012858003488') {
         if(messageReaction.emoji.id == getEmojiID(yggdrasil.emoji)) {
             rrguild.members.get(user.id).removeRole(yggdrasil.roleID);
             user.send(`You left **${rrguild.roles.get(yggdrasil.roleID).name}**`);            
@@ -292,7 +286,7 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
         }
     }
 
-    if(messageReaction.message.id == '516863523490365442') {
+    if(messageReaction.message.id == '517752158767284253') {
         if(messageReaction.emoji.id == getEmojiID(rrAccept.emoji)) {
             rrguild.members.get(user.id).addRole(rrAccept.camperOrientationID);
         }
