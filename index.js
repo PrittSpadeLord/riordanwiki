@@ -215,14 +215,14 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
             user.send(`Thanks for accepting the rules. You're now free to access the rest of the channels.`);
         }
         else if(messageReaction.emoji.id == getEmojiID(rrDeny.emoji)) {
-            if(rrguild.members.get(user.id).kickable == true) {
+            if(rrguild.members.get(user.id).hasPermissions('BAN_MEMBERS')) {
+                user.send('A mod refusing to follow the rules? Hmm...');
+            }
+            else {
                 (async () => {
                     await user.send('You have been kicked for refusing to accept the rules.');
                     rrguild.members.get(user.id).kick('refused to accept rules');
                 })();
-            }
-            else {
-                user.send('A mod refusing to follow the rules? Hmm...');
             }
         }
     }
