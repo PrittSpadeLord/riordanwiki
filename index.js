@@ -28,12 +28,15 @@ var trivia;
 
 MongoClient.connect('mongodb://ducks:penguins0@ds062818.mlab.com:62818/riordan-wiki', {useNewUrlParser: true}, (err, client) => {
     if(err) console.log(err);
-    console.log('Connected to Database!');
-    db = client.db('riordan-wiki');
-    db.collection('trivia').find().toArray((err, result) => {
-        if(err) console.log(err);
-        trivia = result[0];
-    });
+    else {
+        console.log('Connected to Database!');
+        db = client.db('riordan-wiki');
+        db.collection('trivia').find().toArray((err, result) => {
+            if(err) console.log(err);
+            trivia = result[0];
+        });
+    }
+    
 });
 
 //FS-ImageMagick
@@ -42,7 +45,11 @@ const fs = require('fs');
 
 const gm = require('gm').subClass({imageMagick: true});
 
-//Discord
+//Random-Name
+
+var randomName = require('node-random-name');
+
+//Discord-TERMINUS
 
 const Discord = require('discord.js');
 const bot = new Discord.Client();
@@ -113,36 +120,40 @@ bot.on('ready', async () => {
 //Member-Joined
 
 bot.on('guildMemberAdd', (member) => {
-    member.addRole(rrAccept.camperOrientationID);
+    if(member.guild.id == rrguild.id) {
+        member.addRole(rrAccept.camperOrientationID);
 
-    gm('terminus-template.png')
-    .gravity('center')
-    .stroke('#000000')
-    .fill('#000000')
-    .pointSize(160)
-    .font('Times New Roman')
-    .drawText(0, 0, member.user.username + '#' + member.user.discriminator, 'center')
-    .write('terminus.png', (err) => {
-        if(err) throw err;
+        gm('terminus-template.png')
+        .gravity('center')
+        .stroke('#000000')
+        .fill('#000000')
+        .pointSize(160)
+        .font('Times New Roman')
+        .drawText(0, 0, member.user.username + '#' + member.user.discriminator, 'center')
+        .write('terminus.png', (err) => {
+            if(err) throw err;
 
-        welcomeChannel.send({files: [{
-            attachment: 'terminus.png',
-            name: 'terminus.png'
-        }]})
-        .then(message => {
-            fs.unlink('terminus.png', (err) => {
-                if(err) throw err;
-            });
-            generalChannel.send(`Hello <@${member.user.id}> and welcome to Riordan Wikia's discord server! If you're a new discord user who has probably just created a discord account, check out https://prittspadelord.github.io/RiordanWikiDiscord/ for some insightful help on how to navigate through Discord.
-            
-            Once you've done that, go to <#505760915988414467> and make sure you follow ***all of the instructions*** on that page if you wish to access the rest of the server.`);
-        })
-        .catch(console.error);
-    });
+            welcomeChannel.send({files: [{
+                attachment: 'terminus.png',
+                name: 'terminus.png'
+            }]})
+            .then(message => {
+                fs.unlink('terminus.png', (err) => {
+                    if(err) throw err;
+                });
+                generalChannel.send(`Hello <@${member.user.id}> and welcome to Riordan Wikia's discord server! If you're a new discord user who has probably just created a discord account, check out https://prittspadelord.github.io/RiordanWikiDiscord/ for some insightful help on how to navigate through Discord.
+                
+                Once you've done that, go to <#505760915988414467> and make sure you follow ***all of the instructions*** on that page if you wish to access the rest of the server.`);
+            })
+            .catch(console.error);
+        });
+    }
 });
 
 bot.on('guildMemberRemove', (member) => {
-    welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
+    if(member.guild.id == rrguild.id) {
+        welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
+    }
 });
 
 //Reaction-Add
@@ -221,7 +232,11 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
             else {
                 (async () => {
                     await user.send('You have been kicked for refusing to accept the rules.');
-                    rrguild.members.get(user.id).kick('refused to accept rules');
+                    rrguild.members.get(user.id).kick('refused to accept rules')
+                    .then(() => {
+                        console.log('done');
+                    })
+                    .catch(console.error);
                 })();
             }
         }
@@ -298,6 +313,9 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
 bot.on('message', (message) => {
     if(message.content.startsWith('*')) {
         var command = message.content.slice(1, message.content.length);
+        if(command.toLowerCase() == 'dionysus') {
+            message.channel.send(randomName());
+        }
     }
 });
 
@@ -306,3 +324,304 @@ bot.on('message', (message) => {
 bot.on('error', console.error);
 
 bot.login(token.value);
+
+//Discord-IRIS
+
+const bot1 = new Discord.Client();
+
+var modChannel;
+const left = '513288902803456021';
+const right = '513288899016261632';
+var helpMessage = {
+    id: null,
+    order: 0,
+    messeg: null,
+    author: null,
+    avatarURL: null
+}
+
+bot1.on('ready', () => {
+    console.log('ready!');
+    var statusNumber = 0;
+    setInterval(() => {
+        if(statusNumber == 0) {
+            statusNumber = 1;
+            bot1.user.setActivity('Introducing Iris-Messages', 'PLAYING');
+        }
+        else if(statusNumber == 1) {
+            statusNumber = 2;
+            bot1.user.setActivity('Message me for assistance', 'PLAYING');
+        }
+        else {
+            statusNumber = 0;
+            bot1.user.setActivity('Type i&help for more info', 'PLAYING');
+        }
+    }, 3500);
+    modChannel = bot1.channels.get('431559357587783691');
+});
+
+bot1.on('messageReactionAdd', (messageReaction, user) => {
+    if(user.bot) return;
+    if(messageReaction.message.id == helpMessage.id) {
+        if(messageReaction.emoji.id == right) {
+            helpMessage.order++;
+            messageReaction.message.delete();
+            helpMessageSend[helpMessage.order](messageReaction.message);
+        }
+        if(messageReaction.emoji.id == left) {
+            helpMessage.order--;
+            messageReaction.message.delete();
+            helpMessageSend[helpMessage.order](messageReaction.message);
+        }
+    }
+});
+
+bot1.on('message', (message) => {
+    if(message.author.bot) return;
+    if(!message.guild) {
+        modChannel.send('<@&511562950104842240>', {embed: {
+            color: 0xB218FF,
+            author: {
+                name: message.author.username,
+                icon_url: message.author.avatarURL
+            },
+            title: 'Iris message (Modmail)',
+            description: message.content,
+            timestamp: new Date(),
+            footer: {
+                text: 'User id: ' + message.author.id,
+                icon_url: bot1.user.avatarURL
+            }
+        }})
+        .then(() => {
+            message.react('511793058665463853');
+        })
+        .catch(console.error);
+    }
+    else {
+        if(message.content.startsWith('i&')) {
+            var command = message.content.slice(2, message.content.length);
+            if(command.startsWith('reply') && (message.channel.id == modChannel.id)) {
+                var query = command.slice(6, command.length);
+                var userId = query.slice(0, 18);
+                var replyMessage = query.slice(19, query.length);
+                if(!parseInt(userId)) {
+                    message.channel.send({embed: {
+                        color: 0xB218FF,
+                        fields: [
+                            {
+                                name: 'Incorrect usage of i&reply',
+                                value: 'Send a response to the user. Such messages are attributed with your name upon reaching the user.\n\nUsage: `i&reply [user-id] [content]`'
+                            }
+                        ],
+                        timestamp: new Date(),
+                        footer: {
+                            text: 'Requested by ' + message.author.username,
+                            icon_url: message.author.avatarURL
+                        }
+                    }});
+                }
+                else {
+                    bot1.users.get(userId).send({embed: {
+                        color: 0xB218FF,
+                        author: {
+                            name: message.author.username,
+                            icon_url: message.author.avatarURL
+                        },
+                        description: replyMessage,
+                        timestamp: new Date(),
+                        footer: {
+                            text: 'from IrisBot',
+                            icon_url: bot1.user.avatarURL
+                        }
+                    }})
+                    .then(() => {
+                        message.react('511793058665463853');
+                    })
+                    .catch((err) => {
+                        modChannel.send('Oops, looks like that user has their DMs closed!');
+                        console.log(err);
+                    });
+                }
+            }
+
+            else if(command.startsWith('anonreply') && (message.channel.id == modChannel.id)) {
+                var query = command.slice(10, command.length);
+                var auserId = query.slice(0, 18);
+                var areplyMessage = query.slice(19, query.length);
+                if(!parseInt(auserId)) {
+                    message.channel.send({embed: {
+                        color: 0xB218FF,
+                        fields: [
+                            {
+                                name: 'Incorrect usage of i&anonreply',
+                                value: 'Anonymously send a response to the user. Such messages are attributed as "Moderator" upon reaching the user.\n\nUsage: `i&anonreply [user-id] [content]`'
+                            }
+                        ],
+                        timestamp: new Date(),
+                        footer: {
+                            text: 'Requested by ' + message.author.username,
+                            icon_url: message.author.avatarURL
+                        }
+                    }});
+                }
+                else {
+                    bot1.users.get(auserId).send({embed: {
+                        color: 0xB218FF,
+                        author: {
+                            name: 'Moderator',
+                            icon_url: 'https://i.stack.imgur.com/FXEPv.jpg'
+                        },
+                        description: areplyMessage,
+                        timestamp: new Date(),
+                        footer: {
+                            text: 'IrisBot',
+                            icon_url: bot1.user.avatarURL
+                        }
+                    }})
+                    .then(() => {
+                        message.react('511793058665463853');
+                    })
+                    .catch((err) => {
+                        modChannel.send('Oops, looks like that user has their DMs closed!');
+                        console.log(err);
+                    });
+                }
+            }
+
+            else if(command == 'help') {
+                if(message.channel.id == modChannel.id) {
+                    message.channel.send({embed: {
+                        color: 0xB218FF,
+                        description: 'Iris bot is a bot where members of our server can reach out to the moderation team. The messages sent by our members in the server through the bot\'s DMs will be echoed here. You can respond to them in two ways:',
+                        fields: [
+                            {
+                                name: 'Directly',
+                                value: 'Use the command `i&reply [user-id] [message-content]` to respond to the user directly. The user-id will be provided under the Iris message sent by the user. These messages will be attributed to your name.\n\n***Do not send a message to a user who hasn\'t contacted Iris before, as it would breach ToS.***'
+                            },
+                            {
+                                name: 'Anonymously',
+                                value: 'If you dont wish to reveal yourself, or rather give a generic "moderator" answer, you may use `i&anonreply [user-id] [message-content]`. These messages will be attributed to an anonymous person.'
+                            }
+                        ],
+                        timestamp: new Date(),
+                        footer: {
+                            text: 'Requested by ' + message.author.username,
+                            icon_url: message.author.avatarURL
+                        }
+                    }});
+                }
+                else {
+                    helpMessage.author = message.author.username;
+                    helpMessage.avatarURL = message.author.avatarURL;
+                    helpMessageSend[1](message);
+                }
+            }
+
+            else if(command == 'ping') {
+                message.channel.send({embed: {
+                    color: 0xB218FF,
+                    description: `Recent response time: ${Math.round(bot1.pings[0])}ms\nAverage response time: ${Math.round(bot.ping)}ms`
+                }});
+            }
+        }
+    }
+});
+
+bot1.on('error', console.error);
+
+bot1.login('NTEwNDY3OTYxNDY3OTYxMzQ0.DsczCw.4VZHn1IB7kNijHCbx7jAJnLeLpc');
+
+//Function
+
+var helpMessageSend = ['dum', helpMessage1, helpMessage2]
+
+function helpMessage1(messeg) {
+    messeg.channel.send({embed: {
+        color: 0xB218FF,
+        description: 'Iris helps you to reach out to the entire moderation team privately. To do so, simply DM the bot with whatever your concerns are and they will be relayed to the moderation team. You will receive your responses within the bot DMs itself.\n\nThere are some guidelines we require you to follow:',
+        fields: [
+            {
+                name: 'Open up your DMs',
+                value: 'If your DMs are closed, the bot cannot respond to you. Open up your DMs by going to settings and allowing DMs from server members.'
+            },
+            {
+                name: 'Ask actual questions',
+                value: 'Saying "hi" is not a question. Pretty obvious right? So dont do it. Make sure you only ask questions to the bot. Failing to comply with this may lead to mute/kick/ban.'
+            },
+            {
+                name: 'Respect privacy',
+                value: 'Sometimes, a mod may send an anonymous message without revealing who they are. Do not press them to reveal them. Value their anonymity as much as you value yours.'
+            },
+            {
+                name: 'Use common sense',
+                value: 'Not every guideline can be documented. If you lack this trait, dont feel too bad, it boils down to this: If you do something stupid and a mod points it out, you stop doing it. Simple.'
+            },
+            {
+                name: '<:blank:513311459267051531>',
+                value: '<:blank:513311459267051531>',
+                inline: true
+            },
+            {
+                name: 'Next page',
+                value: '<a:iris_right:' + right + '>',
+                inline: true
+            }
+        ],
+        timestamp: new Date(),
+        footer: {
+            text: 'Requested by ' + helpMessage.author,
+            icon_url: helpMessage.avatarURL
+        }
+    }})
+    .then(msg => {
+        msg.react(right);
+        helpMessage.id = msg.id;
+        helpMessage.order = 1;
+        helpMessage.messeg = messeg;
+    })
+    .catch(console.error);
+}
+
+function helpMessage2(messeg) {
+    messeg.channel.send({embed: {
+        color: 0xB218FF,
+        description: 'Here\'s an example of what you would do when you needed to use Iris:',
+        fields: [
+            {
+                name: 'Go to the DMs of the bot',
+                value: 'This can be achieved by right-clicking/long-pressing the bot\'s name on the screen and opening "Message"'
+            },
+            {
+                name: 'Get straight to the point' ,
+                value: 'Dont start with anything like "hi" or any greetings. Get straight to what you want help with. Minimise the number of individual messages you send.'
+            },
+            {
+                name: 'Wait patiently',
+                value: 'Once you send a message, the bot will react with <:iris:511793058665463853> on your message. This ensures that your message has been successfully relayed to the mod team. Now, all you have to do is wait patiently. Do not send more messages asking "hey, why havent you replied yet?" or such.'
+            },
+            {
+                name: 'Previous page',
+                value: '<a:iris_left:' + left + '>',
+                inline: true
+            },
+            {
+                name: '<:blank:513311459267051531>',
+                value: '<:blank:513311459267051531>',
+                inline: true
+            }
+        ],
+        timestamp: new Date(),
+        footer: {
+            text: 'Requested by ' + helpMessage.author,
+            icon_url: helpMessage.avatarURL
+        }
+    }})
+    .then(msg => {
+        msg.react(left);
+        helpMessage.id = msg.id;
+        helpMessage.order = 2;
+        helpMessage.messeg = messeg;
+    })
+    .catch(console.error);
+}

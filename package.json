@@ -12,6 +12,7 @@
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "gm": "^1.23.1",
-    "mongodb": "^3.1.9"
+    "mongodb": "^3.1.9",
+    "node-random-name": "^1.0.1"
   }
 }
