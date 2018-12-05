@@ -141,7 +141,7 @@ bot.on('guildMemberAdd', (member) => {
                 fs.unlink('terminus.png', (err) => {
                     if(err) throw err;
                 });
-                generalChannel.send(`Hello <@${member.user.id}> and welcome to Riordan Wikia's discord server! If you're a new discord user who has probably just created a discord account, check out https://prittspadelord.github.io/RiordanWikiDiscord/ for some insightful help on how to navigate through Discord.
+                welcomeChannel.send(`Hello <@${member.user.id}> and welcome to Riordan Wikia's discord server! If you're a new discord user who has probably just created a discord account, check out https://prittspadelord.github.io/RiordanWikiDiscord/ for some insightful help on how to navigate through Discord.
                 
                 Once you've done that, go to <#505760915988414467> and make sure you follow ***all of the instructions*** on that page if you wish to access the rest of the server.`);
             })
