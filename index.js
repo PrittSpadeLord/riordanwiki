@@ -166,7 +166,7 @@ bot.on('guildMemberRemove', (member) => {
 bot.on('messageReactionAdd', (messageReaction, user) => {
     if(user.bot) return;
     var reactionMessage = messageReaction.message;
-    if((reactionMessage.reactions.array().length >= 4) && (messageReaction.message.id != '517751012858003488'))  {
+    if((reactionMessage.reactions.array().length >= 6) && (messageReaction.message.id != '517751012858003488'))  {
         messageReaction.remove(user);
     }
 
