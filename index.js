@@ -637,3 +637,9 @@ function helpMessage2(messeg) {
     })
     .catch(console.error);
 }
+
+//CHEETO-JESUS
+
+const bot2 = new Discord.Client();
+
+bot2.login('NTE4MzA0OTk1MTE3MTA1MTcy.Du1qiQ.jP7-AHmQiBUjo5zJtCSSMLegzHA');
