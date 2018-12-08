@@ -340,6 +340,8 @@ const bot1 = new Discord.Client();
 var modChannel;
 const left = '513288902803456021';
 const right = '513288899016261632';
+
+var pingdev = 0;
 var helpMessage = {
     id: null,
     order: 0,
@@ -352,6 +354,8 @@ bot1.on('ready', () => {
     console.log('ready!');
     var statusNumber = 0;
     setInterval(() => {
+        pingdev += Math.abs(bot.ping - bot.pings[0]);
+
         if(statusNumber == 0) {
             statusNumber = 1;
             bot1.user.setActivity('Introducing Iris-Messages', 'PLAYING');
@@ -526,16 +530,10 @@ bot1.on('message', (message) => {
                 }
             }
 
-            else if(command == 'ping') {
-                var dev = 0;
-                for(var i=0; i<bot1.pings.length; i++) {
-                    var a = bot1.pings[0] - bot.ping;
-                    if(a<0) a=-a;
-                    dev += a;
-                }                
+            else if(command == 'ping') {             
                 message.channel.send({embed: {
                     color: 0xB218FF,
-                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*dev)/100}ms`
+                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*(pingdev/bot.ping))/100}ms`
                 }});
             }
         }
