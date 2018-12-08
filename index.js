@@ -319,7 +319,11 @@ bot.on('message', (message) => {
     if(message.content.startsWith('*')) {
         var command = message.content.slice(1, message.content.length);
         if(command.toLowerCase() == 'dionysus') {
-            message.channel.send(randomName());
+            var name = randomName();
+            while(!name.startsWith('Ab')) {
+                name = randomName();
+            }
+            message.channel.send(name);
         }
     }
 });
