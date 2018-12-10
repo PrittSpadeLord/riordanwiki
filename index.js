@@ -82,7 +82,7 @@ const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '3652757462788341
 const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '339883386598457358'};
 const rrDeny = {emoji: '<:rr_deny:506063149674397707>'};
 
-const embedColor = 0x6D85A8;
+const tEmbedColor = 0x6D85A8;
 
 function getEmojiID(emoji) {
     return emoji.slice(emoji.length - 19, emoji.length - 1);
@@ -127,7 +127,7 @@ bot.on('guildMemberAdd', (member) => {
         .stroke('#000000')
         .fill('#000000')
         .pointSize(160)
-        .font('Times New Roman')
+        .font('Times-Roman')
         .drawText(0, 0, member.user.username + '#' + member.user.discriminator, 'center')
         .write('terminus.png', (err) => {
             if(err) throw err;
@@ -342,6 +342,7 @@ const left = '513288902803456021';
 const right = '513288899016261632';
 
 var pingdev = 0;
+var pingn = 0;
 var helpMessage = {
     id: null,
     order: 0,
@@ -354,6 +355,7 @@ bot1.on('ready', () => {
     console.log('ready!');
     var statusNumber = 0;
     setInterval(() => {
+        pingn += 1;
         pingdev += Math.abs(bot.ping - bot.pings[0]);
 
         if(statusNumber == 0) {
@@ -533,7 +535,7 @@ bot1.on('message', (message) => {
             else if(command == 'ping') {             
                 message.channel.send({embed: {
                     color: 0xB218FF,
-                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*(pingdev/bot.ping))/100}ms`
+                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*(pingdev/(pingn * bot.ping))/100}ms`
                 }});
             }
         }
