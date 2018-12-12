@@ -535,7 +535,7 @@ bot1.on('message', (message) => {
             else if(command == 'ping') {             
                 message.channel.send({embed: {
                     color: 0xB218FF,
-                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*(pingdev/(pingn * bot.ping))/100}ms`
+                    description: `Recent response time: ${Math.round(100*bot1.pings[0])/100}ms\nAverage response time: ${Math.round(100*bot.ping)/100}ms\nMean deviation: ${Math.round(100*(pingdev/(pingn * bot.ping)))/100}ms`
                 }});
             }
         }
