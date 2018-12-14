@@ -96,14 +96,24 @@ bot.on('ready', async () => {
     bot.user.setActivity('*help', 'PLAYING');
 
     rrguild = bot.guilds.get('282310567719469056');
-    welcomeChannel = bot.channels.get('505809707827724292'); //Aux    
+    welcomeChannel = bot.channels.get('505809707827724292'); //Aux
+    
+    var elysium = await bot.channels.get('340370598058393601');
+
+    elysium.fetchMessages({ limit: 10 })
+        .then(messages => {
+            for(var j=0; j<messages.length; j++) {
+                console.log(messages[j].author + ':-\n' + messages[j].content + '\n\n');
+            }
+        })
+        .catch(console.error);
 
     await rrguild.fetchMembers();
     var rrchannels = rrguild.channels.array();
     for(var i=0; i<rrchannels.length; i++) {
         if(rrchannels[i].type == 'text') {
             await rrchannels[i].fetchMessages({limit: 50});
-            console.log(rrchannels[i].name);
+            console.log(rrchannels[i].name + ' - ' + rrchannels[i].id);
         }
     }
 
@@ -143,7 +153,7 @@ bot.on('guildMemberAdd', (member) => {
                 
                 var d = new Date();
                 if(((d.getTime() - member.user.createdAt.getTime())/(1000*60*60*24)) <= 14) {
-                    welcomeChannel.send(`Hello <@${member.user.id}> and welcome to Rick Riordan Wiki's Official Discord server. We have detected you as a new user to Discord (less than a week old). Discord is a very versatile messaging app, and its versatility can make it complicated to newer users. To help you out, check out https://prittspadelord.github.io/RiordanWikiDiscord/ where we explain how to navigate through Discord and understand its basic terms\n\nOnce you've read that, head over to <#505760915988414467> and follow ***all of the instructions*** on that page to gain access to the main channels.`)
+                    welcomeChannel.send(`Hello <@${member.user.id}> and welcome to Rick Riordan Wiki's Official Discord server. We have detected you as a new user to Discord (less than a week old). Discord is a very versatile messaging app, and its versatility can make it complicated to newer users. To help you out, check out https://prittspadelord.github.io/RiordanWikiDiscord/ where we explain how to navigate through Discord and understand its basic terms.\n\nOnce you've read that, head over to <#505760915988414467> and follow ***all of the instructions*** on that page to gain access to the main channels.`)
                 }
                 else {
                     welcomeChannel.send(`Hello <@${member.user.id}> and welcome to Rick Riordan Wiki's Official Discord server. Head over to <#505760915988414467> and follow ***all of the instructions*** on that page to gain access to the main channels.`)
