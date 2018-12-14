@@ -97,16 +97,6 @@ bot.on('ready', async () => {
 
     rrguild = bot.guilds.get('282310567719469056');
     welcomeChannel = bot.channels.get('505809707827724292'); //Aux
-    
-    var elysium = await bot.channels.get('340370598058393601');
-
-    elysium.fetchMessages({ limit: 10 })
-        .then(messages => {
-            for(var j=0; j<messages.length; j++) {
-                console.log(messages[j].author + ':-\n' + messages[j].content + '\n\n');
-            }
-        })
-        .catch(console.error);
 
     await rrguild.fetchMembers();
     var rrchannels = rrguild.channels.array();
