@@ -364,7 +364,7 @@ bot1.on('ready', () => {
         }
         else if(statusNumber == 1) {
             statusNumber = 2;
-            bot1.user.setActivity('Message me for help from mods', 'PLAYING');
+            bot1.user.setActivity('DM for moderator help', 'PLAYING');
         }
         else {
             statusNumber = 0;
