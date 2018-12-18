@@ -360,11 +360,11 @@ bot1.on('ready', () => {
 
         if(statusNumber == 0) {
             statusNumber = 1;
-            bot1.user.setActivity('Introducing Iris-Messages', 'PLAYING');
+            bot1.user.setActivity('Introducing Mod-mail', 'PLAYING');
         }
         else if(statusNumber == 1) {
             statusNumber = 2;
-            bot1.user.setActivity('DM for moderator help', 'PLAYING');
+            bot1.user.setActivity('Message me for assistance', 'PLAYING');
         }
         else {
             statusNumber = 0;
@@ -645,3 +645,16 @@ function helpMessage2(messeg) {
 const bot2 = new Discord.Client();
 
 bot2.login('NTE4MzA0OTk1MTE3MTA1MTcy.Du1qiQ.jP7-AHmQiBUjo5zJtCSSMLegzHA');
+
+//VOTEBOT
+
+const votebot = new Discord.Client();
+
+votebot.on('message', (message) => {
+    if((message.channel.id == '475700587271421952') || (message.channel.id == '472871813450301440') || (message.channel.id == '388244076685688834')) {
+        message.react('390549701793153034');
+        message.react('390549655991222282');
+    }
+});
+
+votebot.login('NTI0NTU1NTI5OTA1NzY2NDAx.DvpyAQ.cv80tLVP1wkOyYuZhO5dPIVb4ZA');
