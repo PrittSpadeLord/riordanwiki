@@ -56,6 +56,7 @@ const bot = new Discord.Client();
 const token = require('./Confidential/token.json')
 
 var rrguild;
+var auxguild;
 var reactionChannel;
 var welcomeChannel;
 var generalChannel;
@@ -96,6 +97,7 @@ bot.on('ready', async () => {
     bot.user.setActivity('*help', 'PLAYING');
 
     rrguild = bot.guilds.get('282310567719469056');
+    auxguild = bot.guilds.get('505809707827724288');
     welcomeChannel = bot.channels.get('505809707827724292'); //Aux
 
     await rrguild.fetchMembers();
@@ -323,6 +325,146 @@ bot.on('message', (message) => {
                 name = randomName();
             }
             message.channel.send(name);
+        }
+
+        if(command.startsWith('ban')) {
+            if(command.endsWith('>')) {
+                var banuserid = command.slice(command.length - 19, command.length - 1);
+            }
+            else {
+                var banuserid = command.slice(command.length - 18, command.length);
+            }
+            var banmemb = rrguild.members.get(banuserid);
+            var authmemb = rrguild.members.get(message.author.id);
+            if(authmemb.hasPermissions('BAN_MEMBERS')) {
+                if(banuserid == message.author.id) {
+                    message.channel.send('I won\'t let you ban yourself.');
+                }
+                else {
+                    if(banmemb != undefined) {
+                        if(banmemb.hasPermissions('BAN_MEMBERS')) {
+                            message.channel.send('What? Are you trying to ban another mod?');
+                        }
+                        else {
+                            banmemb.ban()
+                            .then(() => {
+                                message.channel.send(`Successfully banned **${(banmemb.user.username + '#' + banmemb.user.discriminator) || banuserid}**`);
+                            })
+                            .catch(console.log('Error in banning this user'));
+                        }
+                    }
+                    else {
+                        message.channel.send('Couldn\'t find this user');
+                    }
+                }
+            }
+            else {
+                message.channel.send('Nice try, you dont have the permissions to use this command.');
+            }
+        }
+
+        if(command.startsWith('kick')) {
+            if(command.endsWith('>')) {
+                var kickuserid = command.slice(command.length - 19, command.length - 1);
+            }
+            else {
+                var kickuserid = command.slice(command.length - 18, command.length);
+            }
+            var kickmemb = rrguild.members.get(banuserid);
+            var authmemb = rrguild.members.get(message.author.id);
+            if(authmemb.hasPermissions('KICK_MEMBERS')) {
+                if(kickuserid == message.author.id) {
+                    message.channel.send('I won\'t let you kick yourself.');
+                }
+                else {
+                    if(kickmemb != undefined) {
+                        if(kickmemb.hasPermissions('KICK_MEMBERS')) {
+                            message.channel.send('What? Are you trying to kick another mod?');
+                        }
+                        else {
+                            kickmemb.kick()
+                            .then(() => {
+                                message.channel.send(`Successfully kicked **${(kickmemb.user.username + '#' + kickmemb.user.discriminator) || kickuserid}**`);
+                            })
+                            .catch(console.log('Error in kicking this user'));
+                        }
+                    }
+                    else {
+                        message.channel.send('Couldn\'t find this user');
+                    }
+                }
+            }
+            else {
+                message.channel.send('Nice try, you dont have the permissions to use this command.');
+            }
+        }
+
+        if(command.startsWith('fop')) {
+            if(command.endsWith('>')) {
+                var fopuserid = command.slice(command.length - 19, command.length - 1);
+            }
+            else {
+                var fopuserid = command.slice(command.length - 18, command.length);
+            }
+            var fopmemb = rrguild.members.get(fopuserid);
+            var authmemb = rrguild.members.get(message.author.id);
+            if(authmemb.hasPermissions('KICK_MEMBERS')) {
+                if(fopuserid == message.author.id) {
+                    message.channel.send('I won\'t let you punish youself ');
+                }
+                else {
+                    if(fopmemb != undefined) {
+                        if(fopmemb.hasPermissions('KICK_MEMBERS')) {
+                            message.channel.send('What? Are you trying to punish another mod?');
+                        }
+                        else {
+                            fopmemb.addRole('428965939816431636')
+                            .then(message.channel.send(`Added role <@&428965939816431636> to **${fopmemb.user.username}#${fopmemb.user.discriminator}**`))
+                            .catch(console.error);
+                        }
+                    }
+                    else {
+                        message.channel.send('Couldn\'t find this user');
+                    }
+                }
+            }
+            else {
+                message.channel.send('Nice try, you dont have the permissions to use this command.');
+            }
+        }
+
+        if(command.startsWith('tart')) {
+            if(command.endsWith('>')) {
+                var tartuserid = command.slice(command.length - 19, command.length - 1);
+            }
+            else {
+                var tartuserid = command.slice(command.length - 18, command.length);
+            }
+            var tartmemb = rrguild.members.get(tartuserid);
+            var authmemb = rrguild.members.get(message.author.id);
+            if(authmemb.hasPermissions('KICK_MEMBERS')) {
+                if(tartuserid == message.author.id) {
+                    message.channel.send('I won\'t let you punish youself ');
+                }
+                else {
+                    if(tartmemb != undefined) {
+                        if(tartmemb.hasPermissions('KICK_MEMBERS')) {
+                            message.channel.send('What? Are you trying to punish another mod?');
+                        }
+                        else {
+                            tartmemb.addRole('339870334448697346')
+                            .then(message.channel.send(`Added role <@&339870334448697346> to **${tartmemb.user.username}#${tartmemb.user.discriminator}**`))
+                            .catch(console.error);
+                        }
+                    }
+                    else {
+                        message.channel.send('Couldn\'t find this user');
+                    }
+                }
+            }
+            else {
+                message.channel.send('Nice try, you dont have the permissions to use this command.');
+            }
         }
     }
 });
