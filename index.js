@@ -327,6 +327,10 @@ bot.on('message', (message) => {
             message.channel.send(name);
         }
 
+        if(command == 'invite') {
+            message.channel.send('https://discord.gg/nKJU53z');
+        }
+
         if(command.startsWith('ban')) {
             if(command.endsWith('>')) {
                 var banuserid = command.slice(command.length - 19, command.length - 1);
