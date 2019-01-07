@@ -94,7 +94,7 @@ function getEmojiID(emoji) {
 bot.on('ready', async () => {
     console.log('Bot is ready');
 
-    bot.user.setActivity('*help', 'PLAYING');
+    //bot.user.setActivity('', 'PLAYING');
 
     rrguild = bot.guilds.get('282310567719469056');
     auxguild = bot.guilds.get('505809707827724288');
@@ -317,7 +317,7 @@ bot.on('messageReactionRemove', (messageReaction, user) => {
 //Messages
 
 bot.on('message', (message) => {
-    if(message.content.startsWith('*')) {
+    if(message.content.startsWith('$')) {
         var command = message.content.slice(1, message.content.length);
         if(command.toLowerCase() == 'dionysus') {
             var name = randomName();
