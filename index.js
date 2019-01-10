@@ -80,7 +80,7 @@ const campJupiter = {emoji:'<:campjupiter:506044617985359883>', roleID: '2826867
 const campHalfBlood = {emoji:'<:camphalfblood:506044618446733331>', roleID: '282686672968351744'};
 const scribe = {emoji: '<:scribe:510318792946089988>', roleID: '365275746278834177'}
 
-const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '339883386598457358'};
+const rrAccept = {emoji: '<:rr_accept:506063149028605962>', camperOrientationID: '531903750315442186'};
 const rrDeny = {emoji: '<:rr_deny:506063149674397707>'};
 
 const tEmbedColor = 0x6D85A8;
