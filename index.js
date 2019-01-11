@@ -158,7 +158,8 @@ bot.on('guildMemberAdd', (member) => {
 
 bot.on('guildMemberRemove', (member) => {
     if(member.guild.id == rrguild.id) {
-        //welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
+        welcomeChannel.send('Sorry to see you leaving ' + member.user.username);
+        
     }
 });
 
