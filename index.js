@@ -477,7 +477,7 @@ bot.on('message', (message) => {
 
 bot.on('error', console.error);
 
-bot.login(token.value);
+bot.login('insert-terminus-token-here');
 
 //Discord-IRIS
 
@@ -690,7 +690,7 @@ bot1.on('message', (message) => {
 
 bot1.on('error', console.error);
 
-bot1.login('NTEwNDY3OTYxNDY3OTYxMzQ0.DsczCw.4VZHn1IB7kNijHCbx7jAJnLeLpc');
+bot1.login('insert-iris-token-here');
 
 //Function
 
@@ -785,22 +785,3 @@ function helpMessage2(messeg) {
     })
     .catch(console.error);
 }
-
-//CHEETO-JESUS
-
-const bot2 = new Discord.Client();
-
-bot2.login('NTE4MzA0OTk1MTE3MTA1MTcy.Du1qiQ.jP7-AHmQiBUjo5zJtCSSMLegzHA');
-
-//VOTEBOT
-
-const votebot = new Discord.Client();
-
-votebot.on('message', (message) => {
-    if((message.channel.id == '475700587271421952') || (message.channel.id == '472871813450301440') || (message.channel.id == '388244076685688834')) {
-        message.react('390549701793153034');
-        message.react('390549655991222282');
-    }
-});
-
-votebot.login('NTI0NTU1NTI5OTA1NzY2NDAx.DvpyAQ.cv80tLVP1wkOyYuZhO5dPIVb4ZA');
